@@ -1,0 +1,146 @@
+{% extends 'archile/base.html' %}
+{% load static %}
+{% block content %}
+<div style="width: 80%;margin: auto;">
+	<br>
+	<div  style="background-color: #ebf3f3;padding: 20px;border-radius: 10px;"> 
+		<blockquote class="blockquote" style="margin: 0px;">
+			<center>
+			<p class="mb-0"><sup><i class="fas fa-quote-left"></i></sup> Sharing knowledge is the most fundamental act of friendship.<br> Because it is a way of giving something without loosing something. <sup><i class="fas fa-quote-right"></i></sup></p>
+			</center>
+			<br>
+			<footer class="blockquote-footer" style="text-align: center;">Richard Stallmary <cite title="Source Title">Source Title</cite></footer>
+		</blockquote>		
+	</div>
+	
+	<br>
+	<style>
+		ul{list-style-type: circle;}
+	</style>
+	
+	<div class="container">
+		<div class="col-md-12 search_results">
+			{% if channels|length|add:0 == 0 and post|length|add:0 == 0 %}
+			<div class="row">
+				<div class="col-md-12" style="margin-top: 2.5rem;">
+				<h4>No Results</h4>
+				</div>
+			</div>
+			{% endif %}
+			<table class="table">
+			{% for i in channels %}
+		    <!--div class="row">
+		    	<div class="col-md-2">
+		    		<img class="channel_logo" src="{{i.logo.url}}">
+		    	</div>
+		    	
+		    	<div class="col-md-7" style="margin-top: 2.5rem;">
+		    		<h3><a href="{% url 'channel' c_id=i.c_id %}" style="text-decoration: none;color: black;">{{i.name}}</a></h3></center>
+		    		<div class="channel_des">
+		    			Subscriptions: {{i.no_of_subscriptions}}
+		    			<br>
+		    			{{i.description}}
+		    		</div>
+		    	</div>
+		    	<div class="col-md-3" style="margin-top: 2.5rem;">
+		    		<div class="row" style="text-align: center;margin-top: 2rem;">
+		    			<div class="col-md-8">
+		    				{% if i.subs %}
+		    				<a href="{% url 'subscribe_channel' c_id=i.c_id %}" style="text-decoration: none;color: black;">
+			    				<button type="button" class="btn btn-danger">Unsubscribe</button>
+			    			</a>
+			    			{% else %}
+			    			<a href="{% url 'subscribe_channel' c_id=i.c_id %}" style="text-decoration: none;color: black;">
+			    				<button type="button" class="btn btn-danger">Subscribe</button>
+			    			</a>
+			    			{% endif %}
+		    			</div>
+		    		</div>
+		    	</div>
+		    </div>
+		    <hr-->
+		    <tr>
+	    			<td style="padding: 20px;"><img class="channel_logo" src="{{i.logo.url}}"></td>
+	    			<td style="vertical-align: middle;">
+	    				<span style="font-size: 28px;color: black;"><a style="text-decoration: none;" href="{% url 'channel' c_id=i.c_id %}">{{i.name}}</a></span>
+	    				<span style="font-size: 14px;color: #aaa;padding-top: -15px;">{{i.no_of_subscriptions}} subscriptions | Created on: {{i.creation_datetime}}</span>
+	    				<br>
+			    		{{i.description}}
+	    			</td>
+	    			<td>
+	    				{% if i.subs %}
+	    				<a href="{% url 'subscribe_channel' c_id=i.c_id %}">
+		    				<button type="button" class="btn btn-muted" style="margin-top:1.5rem;">Unsubscribe</button>
+		    			</a>
+		    			{% else %}
+		    			<a href="{% url 'subscribe_channel' c_id=i.c_id %}">
+		    				<button type="button" class="btn btn-danger" style="margin-top:1.5rem;">Subscribe</button>
+		    			</a>
+		    			{% endif %}
+	    			</td>
+	    		</tr>
+		    {% endfor %}
+		    </table>
+			  <!-- ul class="pagination">
+			    <li class="page-item">
+			      <a class="page-link" href="#" aria-label="Previous">
+			        <span aria-hidden="true">&laquo;</span>
+			        <span class="sr-only">Previous</span>
+			      </a>
+			    </li>
+			    
+			    <li class="page-item"><a class="page-link" href="#">2</a></li>
+			    <li class="page-item"><a class="page-link" href="#">3</a></li>
+			    <li class="page-item">
+			      <a class="page-link" href="#" aria-label="Next">
+			        <span aria-hidden="true">&raquo;</span>
+			        <span class="sr-only">Next</span>
+			      </a>
+			    </li>
+			  </ul>
+			</nav> -->
+		    {% if channels.has_other_pages %}
+		    <nav aria-label="Page navigation example">
+			  <ul class="pagination justify-content-center">
+			    {% if channels.has_previous %}
+			      <li class="page-item">
+			      	<a href="?page={{ channels.previous_page_number }}" class="page-link" aria-label="Previous">
+				      	<span aria-hidden="true">&laquo;</span>
+				        <span class="sr-only">Previous</span>
+				     </a>
+				   </li>
+			    {% else %}
+			      <li class="page-item disabled">
+				      <a class="page-link" href="#" tabindex="-1">Previous</a>
+				   </li>
+			    {% endif %}
+			    {% for i in channels.paginator.page_range %}
+			      {% if channels.number == i %}
+			      	<li class="page-item active">
+				      <a class="page-link" href="#">{{ i }} <span class="sr-only">(current)</span></span></a>
+				    </li>
+			      {% else %}
+			      	<li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+			        
+			      {% endif %}
+			    {% endfor %}
+			    {% if channels.has_next %}
+			    	<li class="page-item">
+			      	<a  href="?page={{ channels.next_page_number }}" class="page-link" aria-label="Previous">
+				      	<span aria-hidden="true">&raquo;</span>
+				        <span class="sr-only">Next</span>
+				     </a>
+				   </li>
+			    {% else %}
+			     <li class="page-item disabled">
+				      <a class="page-link" href="#" tabindex="-1">Next</a>
+				  </li>
+			    {% endif %}
+			  </ul>
+			{% endif %}
+		    
+		</div>
+	</div>
+</div>
+
+{% endblock %}

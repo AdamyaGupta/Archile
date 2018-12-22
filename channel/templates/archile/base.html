@@ -1,0 +1,233 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Archile</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+	<link href="https://fonts.googleapis.com/css?family=Mali" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Fredericka+the+Great" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href={% static 'archile/style.css' %}?v=1>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+	<style type="text/css">
+		a{
+			text-decoration: none;
+			color: black;
+		}
+	</style>
+</head>
+<body>
+	<!-- nav bar -->
+	<!-- <div class="container-fluid"> -->
+	<div class="row navbar-expand-lg navbar navbar-light bg-light fixed-top" style="margin: 0px;padding: 0px;">
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+		    <span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="navbar-collapse collapse" id="collapsibleNavbar">
+			<ul class="navbar-nav">
+				<li class="nav-item">
+					<a href="http://iiits.ac.in/">
+						<img style="width: auto;height:50px;" src={% static 'archile/Institute_logo.png' %}>
+					</a>
+				</li>
+				
+				<li class="nav-item" style="margin: 0px;">
+						<a class="nav-link Archile" href="{% url 'index' %}">Archile</a>
+				</li>
+			</ul>
+			<ul class="navbar-nav ml-auto">
+				<form class="form-inline" action="{% url 'search' %}" method="get">
+					{% csrf_token %}
+					<input class="form-control mr-sm-1" type="text" placeholder="Search" name="search_query" style="width: 400px;" required>
+					<div class="form-group" style="margin-right: 4px;">
+					    <select class="form-control" name="search_type">
+					      <option value="Channel">Channel</option>
+					      <option value="Post">Post</option>
+					    </select>
+					  </div>
+					<button class="btn btn-success" type="submit">Search</button>
+				</form>
+			</ul>
+			<ul class="navbar-nav ml-auto">
+				<!--li class="nav-item">
+					<a class="nav-link" href="#" data-toggle="popover" data-container="body" data-placement="bottom" data-html="true" id="filter" class="nav-link"><i class="fas fa-sliders-h fa-2x" ></i></a>
+				</li-->
+				<li class="nav-item">
+					<a class="nav-link" href="{% url 'create_channel' %}"><i class="fas fa-plus-square fa-2x" ></i></a>
+				</li>
+	            <li class="nav-item">
+	                <a href="#" class="avatar" data-toggle="popover" data-container="body" data-placement="bottom" data-html="true" id="login" class="nav-link">
+	                	<i class="far fa-user" style="font-size: 30px;padding-top: 8px;"></i>
+	                </a>
+	            </li>
+            </ul>
+		</div>
+	</div>
+	<!-- </div> -->
+
+
+	<!-- side nav bar and main container -->
+	<div class="container-fluid" style="margin-top:74.5px">
+	<!-- <div class="col-md-12"> -->
+	        <div class="col col-sm-12" id="main">
+	            {% block content %}
+            	{% endblock %}
+	        </div>
+	<!-- </div> -->
+	</div>
+
+	<!-- user profile popper -->
+	<div id="popover-content-login" class="d-none">
+		<ul class="list-group">
+			<li class="list-group-item">
+				<!--img class="avatar" src="http://rs775.pbsrc.com/albums/yy35/PhoenyxStar/link-1.jpg~c200"-->
+				<span class="col-10" style="font-weight: bolder;text-align-last: right;">{{request.user.first_name}} {{request.user.last_name}}</span>
+			</li>
+			<li class="list-group-item">
+				<a href="{% url 'my_channels' %}" style="text-decoration: none;color: black;">
+				<i class="col-3 far fa-folder-open" ></i>
+				<span class="col-9" style="font-weight: bolder;text-align-last: right;">My Channels</span></a>
+			</li>
+			<li class="list-group-item">
+				<a href="{% url 'liked_posts' %}" style="text-decoration: none;color: black;">
+				<i class="col-3 far fa-thumbs-up fa-lg" ></i>
+				<span class="col-9" style="font-weight: bolder;text-align-last: right;">Liked Posts</span></a>
+			</li>
+			<li class="list-group-item">
+				<a href="{% url 'my_subscriptions' %}" style="text-decoration: none;color: black;">
+				<i class="col-3 far fa-star" ></i>
+				<span class="col-9" style="font-weight: bolder;text-align-last: right;">Subscriptions</span></a>
+			</li>
+			<li class="list-group-item">
+				<a href="{% url 'logout' %}" style="text-decoration: none;color: black;">
+				<i class="col-3 fas fa-sign-out-alt fa-lg" ></i>
+				<span class="col-9" style="font-weight: bolder;text-align-last: right;">Log Out</span></a>
+			</li>
+		</ul>
+    </div>
+
+
+    <!--div id="popover-content-filter" class="d-none">
+		<ul class="list-group">
+			<div class="form-inline">
+				{% csrf_token %}
+				<div class="form-group col-md-4">
+					<li class="list-group-item">
+		      			<label for="inputDate" style="font-weight: bolder;">Upload Date</label>
+			   		</li>
+			   		<li class="list-group-item">
+			   			<span class="col-3" style="font-weight: bolder;text-align-last: left;">From</span>
+		      			<input type="date" class="form-control" id="inputEmail4" placeholder="From" name="from">
+		      			<i class="fas fa-calendar-alt fa-lg" style="font-weight: bolder;text-align-last: right;"></i>
+			   		</li>
+			   		<li class="list-group-item">
+			   			<span class="col-3" style="font-weight: bolder;text-align-last: left;">To</span>
+		      			<input type="date" class="form-control" id="inputEmail4" placeholder="TO" name="to">
+		      			<i class="fas fa-calendar-alt fa-lg" style="font-weight: bolder;text-align-last: right;"></i>
+			   		</li>
+			   	</div>
+			   	<div class="form-group col-md-4">
+			   		<ul class="list-group col-md-6">
+						<li class="list-group-item">
+			      			<label for="inputDate" style="font-weight: bolder;">Type</label>
+				   		</li>
+				   		<li class="list-group-item">
+			      			<input type="checkbox" name="channel">Channel
+			      		</li>
+			      		<li class="list-group-item">
+							<input type="checkbox"  name="post">Post
+						</li>
+						<li class="list-group-item">
+							<input type="checkbox"  name="documents">Documents
+						</li>
+						<li class="list-group-item">
+							<input type="checkbox"  name="videos">Videos
+				   		</li>
+				   	</ul>
+				   	<ul class="list-group col-md-6">
+				   		<li class="list-group-item">
+			      			<input type="checkbox" name="images">Images
+			      		</li>
+			      		<li class="list-group-item">
+							<input type="checkbox"  name="audio">Audio
+						</li>
+						<li class="list-group-item">
+							<input type="checkbox"  name="archives">Archives
+						</li>
+				   	</ul>
+			   	</div>
+			   	<div class="form-group col-md-4">
+			   		<ul class="list-group col-md-7">
+						<li class="list-group-item">
+			      			<label for="inputDate" style="font-weight: bolder;">Sort By</label>
+				   		</li>
+				   		<li class="list-group-item">
+			      			<input type="radio" name="sort" value="uploadDate_asc">upload_date - asc
+			      		</li>
+			      		<li class="list-group-item">
+							<input type="radio" name="sort" value="uploadDate_dec">upload_date - dec
+						</li>
+						<li class="list-group-item">
+							<input type="radio" name="sort" value="likes_asc">likes - asc
+						</li>
+						<li class="list-group-item">
+							<input type="radio" name="sort" value="likes_dec">likes - dec
+				   		</li>
+				   	</ul>
+				   	<ul class="list-group col-md-5">
+				   		
+				   		<li class="list-group-item">
+			      			<input type="radio" name="sort" value="size_asc">size - asc
+			      		</li>
+						<li class="list-group-item">
+							<input type="radio" name="sort" value="size_dec">size - dec
+						</li>
+				   	</ul>
+			   	</div>
+	   		</div>
+	   	</ul>
+    </div-->
+
+
+	<!-- script for the toggle button -->
+	<script>
+		$("button").click(function(){
+		  var columns_container = $(".dynamic-columns");
+		  if (!columns_container.hasClass("expanded")) {
+		    $(".dynamic-columns .col-2:first").removeClass("px-1 position-fixed");
+		    $(".dynamic-columns .col-2:first").addClass("d-none");
+		    
+		    $(".dynamic-columns .col:last-child").removeClass("offset-2");
+		    $(".dynamic-columns .col:last-child").addClass("col-sm-12");
+		    columns_container.toggleClass("expanded");
+		  }
+		  else {
+		    $(".dynamic-columns .col-2:first").removeClass("d-none");
+		    $(".dynamic-columns .col-2:first").addClass("px-1 position-fixed");
+		    
+		    $(".dynamic-columns .col:last-child").removeClass("col-sm-12");
+		    $(".dynamic-columns .col:last-child").addClass("offset-2");
+		    columns_container.toggleClass("expanded");
+		  }
+		});
+	</script>
+
+	<!-- script for pop-over-->
+	<script>
+		$("[data-toggle=popover]").each(function(i, obj) {
+			$(this).popover({
+			  html: true,
+			  content: function() {
+			    var id = $(this).attr('id')
+			    return $('#popover-content-' + id).html();
+			  }
+			});
+
+		});
+	</script>
+</body>
+</html>
